@@ -9,12 +9,12 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/typefor56/vim-notebook.git"
+    "url": "https://github.com/typefor56/vim-jupyter.git"
   },
   "bugs": {
-    "url": "https://github.com/typefor56/vim-notebook/issues"
+    "url": "https://github.com/typefor56/vim-jupyter/issues"
   },
-  "homepage": "https://github.com/typefor56/vim-notebook#readme",
+  "homepage": "https://github.com/typefor56/vim-jupyter#readme",
   "engines": {
     "vscode": "^1.90.0"
   },
