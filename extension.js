@@ -254,12 +254,14 @@ function registerCommandMode(context, log) {
   let lineKind = ':';
   /** The last search, for `n` / `N` and an empty `/`. */
   let lastSearch;
-  // Same alignment and priority as VSCodeVim's own `-- NORMAL --` item, so
-  // the two sit side by side.
+  // Right after VSCodeVim's own `-- NORMAL --` item (left aligned, priority
+  // Number.MIN_SAFE_INTEGER). VS Code sorts by priority, then by a secondary
+  // key, then by insertion: an equal priority landed this one on the left.
+  // One lower (still an exact integer) puts it to the right, every time.
   const commandLine = vscode.window.createStatusBarItem(
     'vimNotebook.commandLine',
     vscode.StatusBarAlignment.Left,
-    Number.MIN_SAFE_INTEGER,
+    Number.MIN_SAFE_INTEGER - 1,
   );
   commandLine.name = 'Vim Jupyter command line';
   // Keys typed so far ('/' waiting for its second, a leader…), bottom right

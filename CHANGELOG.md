@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.15.1
+
+- The `:` / `§` line sits to the right of VSCodeVim's `-- NORMAL --`, not to
+  its left (an equal status bar priority left the order to chance).
+
 ## 0.15.0
 
 - Renamed Vim Jupyter (`for56.vim-jupyter`): the `vim-notebook` name is no
