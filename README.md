@@ -1,173 +1,84 @@
 # Vim Notebook
 
-Vim in Jupyter notebooks, where [VSCodeVim](https://github.com/VSCodeVim/Vim)
-stops short.
+Vim where [VSCodeVim](https://github.com/VSCodeVim/Vim) stops short in Jupyter
+notebooks. Requires VSCodeVim.
 
-## 1. `gd` then `Ctrl-O`, across cells
+## What it adds
 
-Go to definition, then `Ctrl-O` back to the exact word you left — even when
-the definition lives in another cell. VS Code's navigation history only
-brings you back to the cell, and VSCodeVim's jumplist treats each cell as a
-separate file and loses track. This extension records the cursor (cell +
-line + column) before jumping and restores it inside the notebook. It works
-in plain files too.
+**Jumps across cells.** `gd` then `Ctrl-O` / `Ctrl-I` return to the exact
+word, even when the definition is in another cell. VS Code's history only
+restores the cell; VSCodeVim's jumplist loses track between cells.
 
-## 2. Vim keys on a selected cell
+**Vim keys on a selected cell** (cell selected, not being edited, where
+VSCodeVim sees no key):
 
-With a cell selected but not being edited (a rendered markdown cell, after
-`Shift+Esc`…), no text editor has focus, so VSCodeVim never sees a key. This
-extension hands them back to Vim itself — you still choose when to enter a
-cell (Enter):
+| Keys | Does |
+| --- | --- |
+| `:` | Command line in the status bar: `w` `q` `wq` `x` `q!` `wa` `qa` `wqa` `noh` |
+| `§` | Search the whole notebook (see below) |
+| `u` / `Ctrl-R` | Undo / redo notebook edits |
+| `Ctrl-W` `h` `j` `k` `l` / `w` `W` / `s` `v` / `q` `o` | Move between panes, split, close, instead of closing the notebook |
+| Your VSCodeVim mappings | `,` `;` `<leader>…` mappings that run commands |
 
-- **Your mappings** (`,` `;` `<leader>…`) run as in Vim, without entering a
-  cell: the leader waits for the next key (`vim.timeout`), `Escape` cancels.
-- **`:`** — in command mode VS Code has no active text editor at all, and
-  VSCodeVim only works in one, so Vim's real command line needs a cell with
-  focus. Setting `vimNotebook.commandLine`:
+A lone `/` outside a cell is held back (Jupyter's `a` would insert a cell);
+inside a cell `/` stays Vim's own search of that cell.
 
-  | Value | `:` does |
-  | --- | --- |
-  | `visibleCell` (default in 0.2.0) | Enters a code cell **already on screen** — the selected one, else the nearest below, else above; never the topmost visible cell, whose code is likely scrolled off — and types `:` into the real Vim. Enter / Escape leave it and select your cell again. With no such cell on screen, the status-bar line below. |
-  | `statusBar` (default in 0.3.0) | Always a command line imitated in the status bar, next to Vim's `-- NORMAL --`. Nothing on screen moves, no cell is entered. It understands `w` `q` `wq` `x` `q!` `wa` `qa` `wqa` `noh`; Backspace, Escape and Enter work as in Vim. |
+**Notebook search with `§`**, from a cell or not: matches highlighted live as
+you type (code and rendered markdown), Vim's `match 2 of 7` after Enter,
+`n` / `N` across cells (a code cell is entered with the cursor on the word),
+Enter or `:noh` to end (Escape too, outside a cell).
 
-  VSCodeVim binds `g` `h` `j` `k` `l` `o` `G` for list navigation in command
-  mode. To type them on the status-bar line, add to `keybindings.json`
-  (user keybindings win over extensions):
+**Fast start.** It activates first and wakes VSCodeVim, so Vim keys work as
+soon as the window is up, and `Ctrl-W` never closes the notebook before Vim
+runs.
 
-  ```json
-  { "key": "g", "command": "vimNotebook.exKey", "args": "g", "when": "notebookEditorFocused && !inputFocus && vimNotebook.cmdline" }
-  ```
+## Settings
 
-  and the same for `h` `j` `k` `l` `o`, and `shift+g` with `"args": "G"`.
+| Setting | Default | |
+| --- | --- | --- |
+| `vimNotebook.searchSymbol` | `§` | Symbol shown on the search line |
+| `vimNotebook.doubleSlashSearch` | `false` | Also search the notebook with `//` |
+| `vimNotebook.commandLine` | `statusBar` | `visibleCell`: run `:` in a code cell already on screen, with Vim's real command line |
+| `vimNotebook.keyboardLayout` | `qwerty` | `azerty` translates the digit row and punctuation on the `:` / `§` lines |
 
-- **`§`** searches the **whole notebook**, from a cell or not, on the same
-  status-bar line (`§pattern`, Enter), then `n` / `N` for the next / previous
-  match; the line then gives way to the count alone, `match 2 of 7`, next to
-  VSCodeVim's `-- NORMAL --` (VSCodeVim only redraws its status bar on a key,
-  so it cannot be made to give way). Make it yours:
-  - the **key**: *Keyboard Shortcuts* → "Vim Notebook: Search the Notebook"
-    (default `§`, Shift+! on AZERTY, read as `shift+oem_8` with
-    `"keyboard.dispatch": "keyCode"`);
-  - the **symbol** shown on the line: `"vimNotebook.searchSymbol"`;
-  - **`//`** as well: `"vimNotebook.doubleSlashSearch": true` (inside a cell
-    the first `/` then briefly opens Vim's own search, which flickers).
+To use another key than `§`: *Keyboard Shortcuts* → "Vim Notebook: Search the
+Notebook". With `"keyboard.dispatch": "keyCode"`, `§` on AZERTY is read as
+`shift+oem_8`.
 
-  Inside a cell `/` is Vim's own search of that cell. Outside a cell a single
-  `/` opens a `/` line that holds every key back from the notebook (Jupyter's
-  `a` would insert a cell) and ends with "'/' searches inside a cell only,
-  type § to search the whole notebook". In a cell, Enter in Vim NORMAL clears
-  the highlight and leaves the cursor where it is. It
-  honours `vim.ignorecase` and `vim.smartcase`, wraps around like Vim ("search
-  hit BOTTOM, continuing at TOP"), and an empty `/` repeats the last search.
-  The matching cell is selected and revealed, without entering it. In code
-  cells the current match is highlighted in your theme's find colour and the
-  cursor is put on it (Enter then lands on the word); with `vim.hlsearch` the
-  other matches are highlighted too. While you type the pattern, every match
-  is highlighted live (`vim.incsearch`). Rendered markdown cells are
-  highlighted as well: the extension extends VS Code's markdown renderer and
-  marks the matches in the rendered text. `:noh` (`:nohl`, `:nohlsearch`), Escape
-  or Enter clears the highlight (with a highlight on, the first Enter clears
-  it and the next enters the cell), and `n` / `N` bring it back, as in Vim. Patterns are JavaScript regexes (an invalid one is
-  searched literally).
-- After `§pattern` + Enter (from a cell or not), a match in a **code cell**
-  is entered with the cursor on the word; `n` / `N` (also inside cells while
-  the search is on) go to the next / previous match, cell after cell; Enter
-  ends the search and leaves you in the cell, on the word. A match in a
-  markdown cell is selected and shown rendered, highlighted.
-- **`u`** / **`Ctrl-R`** undo / redo the notebook's edits (cells added,
-  deleted, moved…), like `Ctrl+Z` outside a cell.
+## Wiring the jumps
 
-On QWERTY, VSCodeVim also binds `/` on lists; if `/` toggles list filtering
-instead of searching, add to `keybindings.json`:
-`{ "key": "/", "command": "vimNotebook.slash", "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline" }`.
-On AZERTY with `keyboard.dispatch: keyCode`, `/` is read as `shift+/`: bind
-that instead.
-
-Mapping keys run your VSCodeVim mappings from the extension (there is no
-editor for Vim to act on in command mode).
-
-### Other keyboard layouts
-
-The bundled keys (`,` `;` `space` `\` and `shift+;` for `:`) are what VS
-Code reads on a QWERTY keyboard. With another layout and
-`"keyboard.dispatch": "keyCode"`, VS Code may read a key as something else.
-On a French AZERTY keyboard, for instance, it reads the `;` key as `.` and
-the `:` key as `/`. Run *Developer: Toggle Keyboard Shortcuts
-Troubleshooting*, press the key on a selected cell, and look at the
-`Resolving …` line in the output. Then bind what it shows in
-`keybindings.json`. For AZERTY (the `escape` entry makes sure Escape on the
-`:` command line wins over VSCodeVim's own):
-
-```json
-{
-  "key": ".",
-  "command": "vimNotebook.key",
-  "args": ";",
-  "when": "notebookEditorFocused && !inputFocus && !vimNotebook.cmdline"
-},
-{
-  "key": "/",
-  "command": "vimNotebook.ex",
-  "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline"
-},
-{
-  "key": "escape",
-  "command": "vimNotebook.exCancel",
-  "when": "editorTextFocus && vimNotebook.exFromCommandMode && vim.mode == 'CommandlineInProgress'"
-}
-```
-
-### Typing on the `:` and `§` lines with an AZERTY keyboard
-
-With `"keyboard.dispatch": "keyCode"`, VS Code reads an AZERTY key as its
-shifted character: `_` arrives as `8`, `(` as `5`, `;` as `.`. Set
-`"vimNotebook.keyboardLayout": "azerty"` and the status-bar lines translate
-the digit row (`& é " ' ( - è _ ç à`, Shift for the digits) and `, ? ; . : /`.
-
-## Wiring the jumps to Vim keys
-
-In `settings.json`:
+`settings.json`:
 
 ```json
 "vim.normalModeKeyBindingsNonRecursive": [
-    { "before": ["g", "d"], "commands": ["vimNotebook.goToDefinition"] },
-    { "before": ["<leader>", "g", "d"], "commands": ["vimNotebook.goToDefinition"] }
+    { "before": ["g", "d"], "commands": ["vimNotebook.goToDefinition"] }
 ]
 ```
 
-In `keybindings.json` (user keybindings win over VSCodeVim's own `Ctrl-O`;
-when nothing is recorded, the key falls through to Vim's jumplist):
+`keybindings.json`:
 
 ```json
-{
-  "key": "ctrl+o",
-  "command": "vimNotebook.back",
-  "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && vimNotebook.canGoBack"
-},
-{
-  "key": "ctrl+i",
-  "command": "vimNotebook.forward",
-  "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && vimNotebook.canGoForward"
-}
+{ "key": "ctrl+o", "command": "vimNotebook.back", "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && vimNotebook.canGoBack" },
+{ "key": "ctrl+i", "command": "vimNotebook.forward", "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && vimNotebook.canGoForward" }
 ```
 
-## Install
+## Known limits
 
-No runtime dependencies, no build step:
+- VSCodeVim only redraws its status bar on a key: the `:` / `§` line sits next
+  to `-- NORMAL --` instead of replacing it.
+- VSCodeVim binds `g h j k l o G` on lists; to type them on the `:` / `§` line,
+  bind them to `vimNotebook.exKey` in `keybindings.json` (user bindings win),
+  e.g. `{ "key": "j", "command": "vimNotebook.exKey", "args": "j", "when": "notebookEditorFocused && !inputFocus && vimNotebook.cmdline" }`.
+- On other layouts with `keyCode` dispatch, find how a key is read with
+  *Developer: Toggle Keyboard Shortcuts Troubleshooting*.
+
+## Build and test
 
 ```sh
-npm install        # dev tools only: vsce and the test runner
-npm run package
-code --install-extension vim-notebook-0.1.0.vsix
+npm install
+npm run package                     # vim-notebook-<version>.vsix
+code --install-extension vim-notebook-*.vsix
+npm test                            # real VS Code + your VSCodeVim (VSCODE_VERSION to pick one)
 ```
 
-## Test
-
-`npm test` runs in a real VS Code extension host (1.139.1 by default,
-`VSCODE_VERSION` to change it) with your local VSCodeVim copied in: mapping
-lookup, a `gd`/back/forward round trip across cells (same line and column,
-inside the notebook, no extra tab), a mapping resolved by Vim from a selected
-cell, `:` in both modes (a visible code cell, or the status bar with
-nothing moving), `§` search with `n` / `N` and its `match x of y` count (and its live highlight in rendered markdown), and
-`u` / `Ctrl-R` (run only
-when the test window has the keyboard focus, which `undo` follows).
+MIT licence.
