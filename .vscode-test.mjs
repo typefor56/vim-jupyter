@@ -11,6 +11,8 @@ writeFileSync(
   join(userData, 'User', 'settings.json'),
   JSON.stringify({
     'vim.leader': '<space>',
+    // The '//' tests; the default (off) is tested by switching it in the test.
+    'vimNotebook.doubleSlashSearch': true,
     'vim.normalModeKeyBindingsNonRecursive': [
       { before: [','], commands: ['test.probe'] },
       { before: [';'], commands: [{ command: 'test.probe', args: 'semicolon' }] },

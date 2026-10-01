@@ -274,6 +274,35 @@ suite('search and undo from command mode', () => {
     await until(() => selected() === 2, 'n after :noh');
   });
 
+  test("by default '//' is off: a second '/' searches nothing, the hint names § and the line shows §", async () => {
+    const config = vscode.workspace.getConfiguration('vimNotebook');
+    const before = config.inspect('doubleSlashSearch')?.globalValue;
+    await config.update('doubleSlashSearch', false, vscode.ConfigurationTarget.Global);
+    try {
+      const count = () => vscode.commands.executeCommand('vimNotebook.test.markdownHighlights');
+      await vscode.commands.executeCommand('vimNotebook.noHighlight');
+      await until(async () => (await count()) === 0, 'no highlight to start with');
+      await vscode.commands.executeCommand('vimNotebook.slash');
+      for (const key of ['/', 'f', 'o', 'o', '<CR>']) {
+        await vscode.commands.executeCommand('vimNotebook.exKey', key);
+      }
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      assert.strictEqual(await count(), 0, "'//' did not search");
+      assert.match(
+        String(await vscode.commands.executeCommand('vimNotebook.test.searchStatus')),
+        /type § to search the whole notebook$/,
+      );
+      await vscode.commands.executeCommand('vimNotebook.search'); // what § runs
+      for (const key of ['f', 'o', 'o']) {
+        await vscode.commands.executeCommand('vimNotebook.exKey', key);
+      }
+      assert.strictEqual(await vscode.commands.executeCommand('vimNotebook.test.lineText'), '§foo|');
+      await vscode.commands.executeCommand('vimNotebook.exKey', '<Esc>');
+    } finally {
+      await config.update('doubleSlashSearch', before, vscode.ConfigurationTarget.Global);
+    }
+  });
+
   test("outside a cell, '/' + another key is held back with an error; '//' opens the notebook search", async () => {
     const count = () => vscode.commands.executeCommand('vimNotebook.test.markdownHighlights');
     const status = () => vscode.commands.executeCommand('vimNotebook.test.searchStatus');
@@ -288,7 +317,7 @@ suite('search and undo from command mode', () => {
     await new Promise((resolve) => setTimeout(resolve, 300));
     assert.strictEqual(notebook.cellCount, cells, 'no cell added');
     assert.strictEqual(await count(), 0, 'nothing searched');
-    assert.ok(String(await status()).startsWith("/ra: '/' searches inside a cell only"), 'the hint to use //');
+    assert.ok(String(await status()).startsWith("/ra: '/' searches inside a cell only"), 'the hint to use the search key');
     // '//' then 'foo': the notebook search, highlighting live.
     await vscode.commands.executeCommand('vimNotebook.slash');
     for (const key of ['/', 'f', 'o', 'o']) {

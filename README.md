@@ -40,18 +40,23 @@ cell (Enter):
 
   and the same for `h` `j` `k` `l` `o`, and `shift+g` with `"args": "G"`.
 
-- **`//`** searches the **whole notebook** from the same status-bar line
-  (`//pattern`, Enter), then `n` / `N` for the next / previous match; the
-  line then gives way to the count alone, `match 2 of 7`. Outside a cell a
-  single `/` opens a `/` line that holds every key back from the notebook
-  (Jupyter's `a` would insert a cell): a second `/` makes it `//`, anything
-  else ends with "'/' searches inside a cell only, type // to search the
-  whole notebook". Inside a code cell `/` stays Vim's own search of that
-  cell, opened at once; a second `/` right after turns it into `//`, the cell
-  keeping the focus. The line and its count sit next to VSCodeVim's
-  `-- NORMAL --`: VSCodeVim only redraws its status bar on a key, so it
-  cannot be made to give way to them and come back reliably. In a cell, Enter in Vim NORMAL clears the
-  highlight and leaves the cursor where it is. It
+- **`§`** searches the **whole notebook**, from a cell or not, on the same
+  status-bar line (`§pattern`, Enter), then `n` / `N` for the next / previous
+  match; the line then gives way to the count alone, `match 2 of 7`, next to
+  VSCodeVim's `-- NORMAL --` (VSCodeVim only redraws its status bar on a key,
+  so it cannot be made to give way). Make it yours:
+  - the **key**: *Keyboard Shortcuts* → "Vim Notebook: Search the Notebook"
+    (default `§`, Shift+! on AZERTY, read as `shift+oem_8` with
+    `"keyboard.dispatch": "keyCode"`);
+  - the **symbol** shown on the line: `"vimNotebook.searchSymbol"`;
+  - **`//`** as well: `"vimNotebook.doubleSlashSearch": true` (inside a cell
+    the first `/` then briefly opens Vim's own search, which flickers).
+
+  Inside a cell `/` is Vim's own search of that cell. Outside a cell a single
+  `/` opens a `/` line that holds every key back from the notebook (Jupyter's
+  `a` would insert a cell) and ends with "'/' searches inside a cell only,
+  type § to search the whole notebook". In a cell, Enter in Vim NORMAL clears
+  the highlight and leaves the cursor where it is. It
   honours `vim.ignorecase` and `vim.smartcase`, wraps around like Vim ("search
   hit BOTTOM, continuing at TOP"), and an empty `/` repeats the last search.
   The matching cell is selected and revealed, without entering it. In code
@@ -64,21 +69,11 @@ cell (Enter):
   or Enter clears the highlight (with a highlight on, the first Enter clears
   it and the next enters the cell), and `n` / `N` bring it back, as in Vim. Patterns are JavaScript regexes (an invalid one is
   searched literally).
-- After `//pattern` + Enter (from a cell or not), a match in a **code cell**
+- After `§pattern` + Enter (from a cell or not), a match in a **code cell**
   is entered with the cursor on the word; `n` / `N` (also inside cells while
   the search is on) go to the next / previous match, cell after cell; Enter
   ends the search and leaves you in the cell, on the word. A match in a
   markdown cell is selected and shown rendered, highlighted.
-- A **dedicated key** can open the notebook search directly, without the
-  first `/` going through Vim's own search (which makes the status bar
-  flicker in a cell): bind it to `vimNotebook.search`. On AZERTY with
-  `keyboard.dispatch: keyCode`, `§` (Shift+!) is read as `shift+oem_8`:
-
-  ```json
-  { "key": "shift+oem_8", "command": "vimNotebook.search", "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline" },
-  { "key": "shift+oem_8", "command": "vimNotebook.search", "when": "editorTextFocus && notebookEditorFocused && vim.active && vim.mode == 'Normal' && !vimNotebook.cmdline" }
-  ```
-
 - **`u`** / **`Ctrl-R`** undo / redo the notebook's edits (cells added,
   deleted, moved…), like `Ctrl+Z` outside a cell.
 
@@ -122,7 +117,7 @@ Troubleshooting*, press the key on a selected cell, and look at the
 }
 ```
 
-### Typing on the `:` and `//` lines with an AZERTY keyboard
+### Typing on the `:` and `§` lines with an AZERTY keyboard
 
 With `"keyboard.dispatch": "keyCode"`, VS Code reads an AZERTY key as its
 shifted character: `_` arrives as `8`, `(` as `5`, `;` as `.`. Set
@@ -173,6 +168,6 @@ code --install-extension vim-notebook-0.1.0.vsix
 lookup, a `gd`/back/forward round trip across cells (same line and column,
 inside the notebook, no extra tab), a mapping resolved by Vim from a selected
 cell, `:` in both modes (a visible code cell, or the status bar with
-nothing moving), `//` search with `n` / `N` and its `[x/y]` count (and its live highlight in rendered markdown), and
+nothing moving), `§` search with `n` / `N` and its `match x of y` count (and its live highlight in rendered markdown), and
 `u` / `Ctrl-R` (run only
 when the test window has the keyboard focus, which `undo` follows).

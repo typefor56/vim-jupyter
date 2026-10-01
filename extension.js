@@ -80,6 +80,16 @@ function cellIndexOf(editor, document) {
   return document === undefined ? -1 : editor.notebook.getCells().findIndex((cell) => cell.document === document);
 }
 
+/** The symbol shown before a notebook search being typed ("§raise"). */
+function searchSymbol() {
+  return vscode.workspace.getConfiguration('vimNotebook').get('searchSymbol', '§');
+}
+
+/** Whether '//' (besides the search key) opens the notebook search. */
+function doubleSlash() {
+  return vscode.workspace.getConfiguration('vimNotebook').get('doubleSlashSearch', false);
+}
+
 function vimLoaded() {
   return vscode.extensions.getExtension('vscodevim.vim')?.isActive === true;
 }
@@ -296,7 +306,7 @@ function registerCommandMode(context, log) {
   /** The command line while typing, otherwise the last message. */
   function renderCommandLine() {
     if (line !== undefined) {
-      commandLine.text = `${lineKind}${line}|`;
+      commandLine.text = `${lineKind === '//' ? searchSymbol() : lineKind}${line}|`;
       commandLine.show();
     } else if (message !== undefined) {
       commandLine.text = message;
@@ -615,6 +625,8 @@ function registerCommandMode(context, log) {
     vscode.commands.registerCommand('vimNotebook.test.searchStatus', () => lastSearchStatus),
     // For the tests: the message on screen right now (undefined when gone).
     vscode.commands.registerCommand('vimNotebook.test.message', () => message),
+    // For the tests: the command line as shown, or undefined when hidden.
+    vscode.commands.registerCommand('vimNotebook.test.lineText', () => (line === undefined ? undefined : commandLine.text)),
     vscode.commands.registerCommand('vimNotebook.noHighlight', () => setHighlighting(false)),
     // Cells scrolled into view, or edited, get their highlights (re)drawn.
     // Always repaint, also to clear: the notebook recycles cell editors as it
@@ -647,7 +659,7 @@ function registerCommandMode(context, log) {
         const kind = lineKind;
         setLine(undefined);
         if (kind === '/') {
-          showMessage(`/${text}: '/' searches inside a cell only, type // to search the whole notebook`);
+          showMessage(`/${text}: '/' searches inside a cell only, type ${searchSymbol()} to search the whole notebook`);
           return;
         }
         if (kind === '//') {
@@ -668,7 +680,7 @@ function registerCommandMode(context, log) {
           return;
         }
         await run(commands);
-      } else if (lineKind === '/' && line === '' && key === '/') {
+      } else if (lineKind === '/' && line === '' && key === '/' && doubleSlash()) {
         setLine('', '//'); // the second '/' of '//'
       } else {
         setLine(line + key);
