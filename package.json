@@ -1,0 +1,1157 @@
+{
+  "name": "vim-notebook",
+  "displayName": "Vim Notebook",
+  "description": "Vim where VSCodeVim stops short in Jupyter notebooks: gd/Ctrl-O jumps across cells, and your Vim keys (:w, :q, Ctrl-W, leader mappings) on a selected cell.",
+  "version": "0.12.2",
+  "publisher": "for56",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "vimNotebook.goToDefinition",
+        "title": "Go to Definition (remember position)",
+        "category": "Vim Notebook"
+      },
+      {
+        "command": "vimNotebook.back",
+        "title": "Jump Back",
+        "category": "Vim Notebook"
+      },
+      {
+        "command": "vimNotebook.forward",
+        "title": "Jump Forward",
+        "category": "Vim Notebook"
+      },
+      {
+        "command": "vimNotebook.ex",
+        "title": "Vim Command Line (:) on the Selected Cell",
+        "category": "Vim Notebook"
+      },
+      {
+        "command": "vimNotebook.search",
+        "title": "Search the Notebook (//)",
+        "category": "Vim Notebook"
+      },
+      {
+        "command": "vimNotebook.searchNext",
+        "title": "Next Match (n)",
+        "category": "Vim Notebook"
+      },
+      {
+        "command": "vimNotebook.searchPrevious",
+        "title": "Previous Match (N)",
+        "category": "Vim Notebook"
+      },
+      {
+        "command": "vimNotebook.noHighlight",
+        "title": "Clear Search Highlight (:noh)",
+        "category": "Vim Notebook"
+      },
+      {
+        "command": "vimNotebook.quitEdit",
+        "title": "Leave the Cell",
+        "category": "Vim Notebook"
+      },
+      {
+        "command": "vimNotebook.enterCell",
+        "title": "Enter the Cell",
+        "category": "Vim Notebook"
+      }
+    ],
+    "keybindings": [
+      {
+        "key": ",",
+        "command": "vimNotebook.key",
+        "args": ",",
+        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.cmdline"
+      },
+      {
+        "key": ";",
+        "command": "vimNotebook.key",
+        "args": ";",
+        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.cmdline"
+      },
+      {
+        "key": "space",
+        "command": "vimNotebook.key",
+        "args": " ",
+        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.cmdline"
+      },
+      {
+        "key": "\\",
+        "command": "vimNotebook.key",
+        "args": "\\",
+        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.cmdline"
+      },
+      {
+        "key": "a",
+        "command": "vimNotebook.key",
+        "args": "a",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "b",
+        "command": "vimNotebook.key",
+        "args": "b",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "c",
+        "command": "vimNotebook.key",
+        "args": "c",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "d",
+        "command": "vimNotebook.key",
+        "args": "d",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "e",
+        "command": "vimNotebook.key",
+        "args": "e",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "f",
+        "command": "vimNotebook.key",
+        "args": "f",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "g",
+        "command": "vimNotebook.key",
+        "args": "g",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "h",
+        "command": "vimNotebook.key",
+        "args": "h",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "i",
+        "command": "vimNotebook.key",
+        "args": "i",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "j",
+        "command": "vimNotebook.key",
+        "args": "j",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "k",
+        "command": "vimNotebook.key",
+        "args": "k",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "l",
+        "command": "vimNotebook.key",
+        "args": "l",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "m",
+        "command": "vimNotebook.key",
+        "args": "m",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "n",
+        "command": "vimNotebook.key",
+        "args": "n",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "o",
+        "command": "vimNotebook.key",
+        "args": "o",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "p",
+        "command": "vimNotebook.key",
+        "args": "p",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "q",
+        "command": "vimNotebook.key",
+        "args": "q",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "r",
+        "command": "vimNotebook.key",
+        "args": "r",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "s",
+        "command": "vimNotebook.key",
+        "args": "s",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "t",
+        "command": "vimNotebook.key",
+        "args": "t",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "u",
+        "command": "vimNotebook.key",
+        "args": "u",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "v",
+        "command": "vimNotebook.key",
+        "args": "v",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "w",
+        "command": "vimNotebook.key",
+        "args": "w",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "x",
+        "command": "vimNotebook.key",
+        "args": "x",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "y",
+        "command": "vimNotebook.key",
+        "args": "y",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "z",
+        "command": "vimNotebook.key",
+        "args": "z",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "0",
+        "command": "vimNotebook.key",
+        "args": "0",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "1",
+        "command": "vimNotebook.key",
+        "args": "1",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "2",
+        "command": "vimNotebook.key",
+        "args": "2",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "3",
+        "command": "vimNotebook.key",
+        "args": "3",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "4",
+        "command": "vimNotebook.key",
+        "args": "4",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "5",
+        "command": "vimNotebook.key",
+        "args": "5",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "6",
+        "command": "vimNotebook.key",
+        "args": "6",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "7",
+        "command": "vimNotebook.key",
+        "args": "7",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "8",
+        "command": "vimNotebook.key",
+        "args": "8",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "9",
+        "command": "vimNotebook.key",
+        "args": "9",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "escape",
+        "command": "vimNotebook.cancel",
+        "when": "notebookEditorFocused && !inputFocus && vimNotebook.pending"
+      },
+      {
+        "key": "shift+;",
+        "command": "vimNotebook.ex",
+        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "a",
+        "command": "vimNotebook.exKey",
+        "args": "a",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+a",
+        "command": "vimNotebook.exKey",
+        "args": "A",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "b",
+        "command": "vimNotebook.exKey",
+        "args": "b",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+b",
+        "command": "vimNotebook.exKey",
+        "args": "B",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "c",
+        "command": "vimNotebook.exKey",
+        "args": "c",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+c",
+        "command": "vimNotebook.exKey",
+        "args": "C",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "d",
+        "command": "vimNotebook.exKey",
+        "args": "d",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+d",
+        "command": "vimNotebook.exKey",
+        "args": "D",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "e",
+        "command": "vimNotebook.exKey",
+        "args": "e",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+e",
+        "command": "vimNotebook.exKey",
+        "args": "E",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "f",
+        "command": "vimNotebook.exKey",
+        "args": "f",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+f",
+        "command": "vimNotebook.exKey",
+        "args": "F",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "g",
+        "command": "vimNotebook.exKey",
+        "args": "g",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+g",
+        "command": "vimNotebook.exKey",
+        "args": "G",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "h",
+        "command": "vimNotebook.exKey",
+        "args": "h",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+h",
+        "command": "vimNotebook.exKey",
+        "args": "H",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "i",
+        "command": "vimNotebook.exKey",
+        "args": "i",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+i",
+        "command": "vimNotebook.exKey",
+        "args": "I",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "j",
+        "command": "vimNotebook.exKey",
+        "args": "j",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+j",
+        "command": "vimNotebook.exKey",
+        "args": "J",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "k",
+        "command": "vimNotebook.exKey",
+        "args": "k",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+k",
+        "command": "vimNotebook.exKey",
+        "args": "K",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "l",
+        "command": "vimNotebook.exKey",
+        "args": "l",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+l",
+        "command": "vimNotebook.exKey",
+        "args": "L",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "m",
+        "command": "vimNotebook.exKey",
+        "args": "m",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+m",
+        "command": "vimNotebook.exKey",
+        "args": "M",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "n",
+        "command": "vimNotebook.exKey",
+        "args": "n",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+n",
+        "command": "vimNotebook.exKey",
+        "args": "N",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "o",
+        "command": "vimNotebook.exKey",
+        "args": "o",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+o",
+        "command": "vimNotebook.exKey",
+        "args": "O",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "p",
+        "command": "vimNotebook.exKey",
+        "args": "p",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+p",
+        "command": "vimNotebook.exKey",
+        "args": "P",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "q",
+        "command": "vimNotebook.exKey",
+        "args": "q",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+q",
+        "command": "vimNotebook.exKey",
+        "args": "Q",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "r",
+        "command": "vimNotebook.exKey",
+        "args": "r",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+r",
+        "command": "vimNotebook.exKey",
+        "args": "R",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "s",
+        "command": "vimNotebook.exKey",
+        "args": "s",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+s",
+        "command": "vimNotebook.exKey",
+        "args": "S",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "t",
+        "command": "vimNotebook.exKey",
+        "args": "t",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+t",
+        "command": "vimNotebook.exKey",
+        "args": "T",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "u",
+        "command": "vimNotebook.exKey",
+        "args": "u",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+u",
+        "command": "vimNotebook.exKey",
+        "args": "U",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "v",
+        "command": "vimNotebook.exKey",
+        "args": "v",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+v",
+        "command": "vimNotebook.exKey",
+        "args": "V",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "w",
+        "command": "vimNotebook.exKey",
+        "args": "w",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+w",
+        "command": "vimNotebook.exKey",
+        "args": "W",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "x",
+        "command": "vimNotebook.exKey",
+        "args": "x",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+x",
+        "command": "vimNotebook.exKey",
+        "args": "X",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "y",
+        "command": "vimNotebook.exKey",
+        "args": "y",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+y",
+        "command": "vimNotebook.exKey",
+        "args": "Y",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "z",
+        "command": "vimNotebook.exKey",
+        "args": "z",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+z",
+        "command": "vimNotebook.exKey",
+        "args": "Z",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "0",
+        "command": "vimNotebook.exKey",
+        "args": "0",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "1",
+        "command": "vimNotebook.exKey",
+        "args": "1",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "2",
+        "command": "vimNotebook.exKey",
+        "args": "2",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "3",
+        "command": "vimNotebook.exKey",
+        "args": "3",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "4",
+        "command": "vimNotebook.exKey",
+        "args": "4",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "5",
+        "command": "vimNotebook.exKey",
+        "args": "5",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "6",
+        "command": "vimNotebook.exKey",
+        "args": "6",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "7",
+        "command": "vimNotebook.exKey",
+        "args": "7",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "8",
+        "command": "vimNotebook.exKey",
+        "args": "8",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "9",
+        "command": "vimNotebook.exKey",
+        "args": "9",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "space",
+        "command": "vimNotebook.exKey",
+        "args": " ",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "backspace",
+        "command": "vimNotebook.exKey",
+        "args": "<BS>",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "enter",
+        "command": "vimNotebook.exKey",
+        "args": "<CR>",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "escape",
+        "command": "vimNotebook.exKey",
+        "args": "<Esc>",
+        "when": "notebookEditorFocused && vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+1",
+        "command": "vimNotebook.exKey",
+        "args": "!",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "shift+5",
+        "command": "vimNotebook.exKey",
+        "args": "%",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": ".",
+        "command": "vimNotebook.exKey",
+        "args": ".",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "/",
+        "command": "vimNotebook.exKey",
+        "args": "/",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "ctrl+w h",
+        "command": "workbench.action.navigateLeft",
+        "when": "notebookEditorFocused && !inputFocus"
+      },
+      {
+        "key": "ctrl+w h",
+        "command": "workbench.action.navigateLeft",
+        "when": "notebookEditorFocused && editorTextFocus && !vim.active"
+      },
+      {
+        "key": "ctrl+w j",
+        "command": "workbench.action.navigateDown",
+        "when": "notebookEditorFocused && !inputFocus"
+      },
+      {
+        "key": "ctrl+w j",
+        "command": "workbench.action.navigateDown",
+        "when": "notebookEditorFocused && editorTextFocus && !vim.active"
+      },
+      {
+        "key": "ctrl+w k",
+        "command": "workbench.action.navigateUp",
+        "when": "notebookEditorFocused && !inputFocus"
+      },
+      {
+        "key": "ctrl+w k",
+        "command": "workbench.action.navigateUp",
+        "when": "notebookEditorFocused && editorTextFocus && !vim.active"
+      },
+      {
+        "key": "ctrl+w l",
+        "command": "workbench.action.navigateRight",
+        "when": "notebookEditorFocused && !inputFocus"
+      },
+      {
+        "key": "ctrl+w l",
+        "command": "workbench.action.navigateRight",
+        "when": "notebookEditorFocused && editorTextFocus && !vim.active"
+      },
+      {
+        "key": "ctrl+w w",
+        "command": "workbench.action.focusNextGroup",
+        "when": "notebookEditorFocused && !inputFocus"
+      },
+      {
+        "key": "ctrl+w w",
+        "command": "workbench.action.focusNextGroup",
+        "when": "notebookEditorFocused && editorTextFocus && !vim.active"
+      },
+      {
+        "key": "ctrl+w ctrl+w",
+        "command": "workbench.action.focusNextGroup",
+        "when": "notebookEditorFocused && !inputFocus"
+      },
+      {
+        "key": "ctrl+w ctrl+w",
+        "command": "workbench.action.focusNextGroup",
+        "when": "notebookEditorFocused && editorTextFocus && !vim.active"
+      },
+      {
+        "key": "ctrl+w shift+w",
+        "command": "workbench.action.focusPreviousGroup",
+        "when": "notebookEditorFocused && !inputFocus"
+      },
+      {
+        "key": "ctrl+w shift+w",
+        "command": "workbench.action.focusPreviousGroup",
+        "when": "notebookEditorFocused && editorTextFocus && !vim.active"
+      },
+      {
+        "key": "ctrl+w p",
+        "command": "workbench.action.focusPreviousGroup",
+        "when": "notebookEditorFocused && !inputFocus"
+      },
+      {
+        "key": "ctrl+w p",
+        "command": "workbench.action.focusPreviousGroup",
+        "when": "notebookEditorFocused && editorTextFocus && !vim.active"
+      },
+      {
+        "key": "ctrl+w s",
+        "command": "workbench.action.splitEditorDown",
+        "when": "notebookEditorFocused && !inputFocus"
+      },
+      {
+        "key": "ctrl+w s",
+        "command": "workbench.action.splitEditorDown",
+        "when": "notebookEditorFocused && editorTextFocus && !vim.active"
+      },
+      {
+        "key": "ctrl+w v",
+        "command": "workbench.action.splitEditorRight",
+        "when": "notebookEditorFocused && !inputFocus"
+      },
+      {
+        "key": "ctrl+w v",
+        "command": "workbench.action.splitEditorRight",
+        "when": "notebookEditorFocused && editorTextFocus && !vim.active"
+      },
+      {
+        "key": "ctrl+w q",
+        "command": "workbench.action.closeActiveEditor",
+        "when": "notebookEditorFocused && !inputFocus"
+      },
+      {
+        "key": "ctrl+w q",
+        "command": "workbench.action.closeActiveEditor",
+        "when": "notebookEditorFocused && editorTextFocus && !vim.active"
+      },
+      {
+        "key": "ctrl+w c",
+        "command": "workbench.action.closeActiveEditor",
+        "when": "notebookEditorFocused && !inputFocus"
+      },
+      {
+        "key": "ctrl+w c",
+        "command": "workbench.action.closeActiveEditor",
+        "when": "notebookEditorFocused && editorTextFocus && !vim.active"
+      },
+      {
+        "key": "ctrl+w o",
+        "command": "workbench.action.closeEditorsInOtherGroups",
+        "when": "notebookEditorFocused && !inputFocus"
+      },
+      {
+        "key": "ctrl+w o",
+        "command": "workbench.action.closeEditorsInOtherGroups",
+        "when": "notebookEditorFocused && editorTextFocus && !vim.active"
+      },
+      {
+        "key": "enter",
+        "command": "vimNotebook.exSubmit",
+        "when": "editorTextFocus && vimNotebook.exFromCommandMode && vim.mode == 'CommandlineInProgress'"
+      },
+      {
+        "key": "escape",
+        "command": "vimNotebook.exCancel",
+        "when": "editorTextFocus && vimNotebook.exFromCommandMode && vim.mode == 'CommandlineInProgress'"
+      },
+      {
+        "key": "/",
+        "command": "vimNotebook.slash",
+        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "n",
+        "command": "vimNotebook.searchNext",
+        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline && vimNotebook.hasSearch"
+      },
+      {
+        "key": "shift+n",
+        "command": "vimNotebook.searchPrevious",
+        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline && vimNotebook.hasSearch"
+      },
+      {
+        "key": "u",
+        "command": "undo",
+        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "ctrl+r",
+        "command": "redo",
+        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline"
+      },
+      {
+        "key": "escape",
+        "command": "vimNotebook.noHighlight",
+        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline && vimNotebook.highlighting"
+      },
+      {
+        "key": "enter",
+        "command": "vimNotebook.noHighlight",
+        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline && vimNotebook.highlighting"
+      },
+      {
+        "key": "/",
+        "command": "vimNotebook.cellSlash",
+        "when": "editorTextFocus && notebookEditorFocused && vim.active && vim.mode == 'Normal' && !vimNotebook.cmdline"
+      },
+      {
+        "key": "/",
+        "command": "vimNotebook.cellSlash",
+        "when": "editorTextFocus && notebookEditorFocused && vim.active && vim.mode == 'SearchInProgressMode' && vimNotebook.cellSlash"
+      },
+      {
+        "key": "enter",
+        "command": "vimNotebook.noHighlight",
+        "when": "editorTextFocus && notebookEditorFocused && vim.active && vim.mode == 'Normal' && !suggestWidgetVisible && !vimNotebook.cmdline"
+      },
+      {
+        "key": "1",
+        "command": "vimNotebook.exKey",
+        "args": "&",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+1",
+        "command": "vimNotebook.exKey",
+        "args": "1",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "2",
+        "command": "vimNotebook.exKey",
+        "args": "\u00e9",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+2",
+        "command": "vimNotebook.exKey",
+        "args": "2",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "3",
+        "command": "vimNotebook.exKey",
+        "args": "\"",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+3",
+        "command": "vimNotebook.exKey",
+        "args": "3",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "4",
+        "command": "vimNotebook.exKey",
+        "args": "'",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+4",
+        "command": "vimNotebook.exKey",
+        "args": "4",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "5",
+        "command": "vimNotebook.exKey",
+        "args": "(",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+5",
+        "command": "vimNotebook.exKey",
+        "args": "5",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "6",
+        "command": "vimNotebook.exKey",
+        "args": "-",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+6",
+        "command": "vimNotebook.exKey",
+        "args": "6",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "7",
+        "command": "vimNotebook.exKey",
+        "args": "\u00e8",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+7",
+        "command": "vimNotebook.exKey",
+        "args": "7",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "8",
+        "command": "vimNotebook.exKey",
+        "args": "_",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+8",
+        "command": "vimNotebook.exKey",
+        "args": "8",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "9",
+        "command": "vimNotebook.exKey",
+        "args": "\u00e7",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+9",
+        "command": "vimNotebook.exKey",
+        "args": "9",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "0",
+        "command": "vimNotebook.exKey",
+        "args": "\u00e0",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+0",
+        "command": "vimNotebook.exKey",
+        "args": "0",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": ",",
+        "command": "vimNotebook.exKey",
+        "args": ",",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+,",
+        "command": "vimNotebook.exKey",
+        "args": "?",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": ".",
+        "command": "vimNotebook.exKey",
+        "args": ";",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+.",
+        "command": "vimNotebook.exKey",
+        "args": ".",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "/",
+        "command": "vimNotebook.exKey",
+        "args": ":",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+/",
+        "command": "vimNotebook.exKey",
+        "args": "/",
+        "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "enter",
+        "command": "vimNotebook.enterCell",
+        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline && !vimNotebook.highlighting"
+      },
+      {
+        "key": "n",
+        "command": "vimNotebook.searchNext",
+        "when": "editorTextFocus && notebookEditorFocused && vim.active && vim.mode == 'Normal' && vimNotebook.highlighting && !vimNotebook.cmdline"
+      },
+      {
+        "key": "shift+n",
+        "command": "vimNotebook.searchPrevious",
+        "when": "editorTextFocus && notebookEditorFocused && vim.active && vim.mode == 'Normal' && vimNotebook.highlighting && !vimNotebook.cmdline"
+      }
+    ],
+    "configuration": {
+      "title": "Vim Notebook",
+      "properties": {
+        "vimNotebook.commandLine": {
+          "type": "string",
+          "enum": [
+            "visibleCell",
+            "statusBar"
+          ],
+          "default": "statusBar",
+          "enumDescriptions": [
+            "':' enters a code cell already on screen (the real Vim command line); with none visible, the status-bar command line.",
+            "':' always opens a command line imitated in the status bar: nothing on screen moves; w, q, wq, x, q!, wa, qa, wqa."
+          ],
+          "description": "Where ':' on a selected cell (outside edit mode) opens the command line."
+        },
+        "vimNotebook.keyboardLayout": {
+          "type": "string",
+          "enum": [
+            "qwerty",
+            "azerty"
+          ],
+          "default": "qwerty",
+          "enumDescriptions": [
+            "US / QWERTY keyboard.",
+            "French AZERTY keyboard (as read with \"keyboard.dispatch\": \"keyCode\": a key is seen as its shifted character, so '_' arrives as '8')."
+          ],
+          "description": "Keyboard layout, for the characters typed on the status-bar ':' and '//' lines."
+        }
+      }
+    },
+    "notebookRenderer": [
+      {
+        "id": "vim-notebook.markdown-search",
+        "displayName": "Vim Notebook search highlight in markdown",
+        "entrypoint": {
+          "extends": "vscode.markdown-it-renderer",
+          "path": "./renderer.js"
+        },
+        "requiresMessaging": "optional"
+      }
+    ]
+  },
+  "scripts": {
+    "test": "vscode-test",
+    "package": "vsce package --allow-missing-repository --allow-star-activation"
+  },
+  "devDependencies": {
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^3.9.2"
+  }
+}

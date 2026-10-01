@@ -1,0 +1,5 @@
+test/**
+.vscode-test.mjs
+.gitignore
+node_modules/**
+.vscode-test/**
