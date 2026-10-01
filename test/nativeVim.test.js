@@ -274,18 +274,6 @@ suite('search and undo from command mode', () => {
     await until(() => selected() === 2, 'n after :noh');
   });
 
-  test('leaving a cell keeps -- NORMAL -- (vim.showmodename untouched)', async () => {
-    const vim = () => vscode.workspace.getConfiguration('vim');
-    const before = vim().inspect('showmodename')?.globalValue;
-    const code = notebook.cellAt(1).document;
-    editor.selections = [new vscode.NotebookRange(1, 2)];
-    await vscode.commands.executeCommand('vimNotebook.enterCell');
-    await until(() => vscode.window.activeTextEditor?.document === code, 'in the code cell');
-    await vscode.commands.executeCommand('vimNotebook.quitEdit');
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    assert.strictEqual(vim().inspect('showmodename')?.globalValue, before, 'mode name kept outside the cell');
-  });
-
   test("outside a cell, '/' + another key is held back with an error; '//' opens the notebook search", async () => {
     const count = () => vscode.commands.executeCommand('vimNotebook.test.markdownHighlights');
     const status = () => vscode.commands.executeCommand('vimNotebook.test.searchStatus');

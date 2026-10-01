@@ -48,10 +48,9 @@ cell (Enter):
   else ends with "'/' searches inside a cell only, type // to search the
   whole notebook". Inside a code cell `/` stays Vim's own search of that
   cell, opened at once; a second `/` right after turns it into `//`, the cell
-  keeping the focus. Outside cells VSCodeVim cannot redraw its status bar (it
-  needs an active editor), so the line and its count sit next to its
-  `-- NORMAL --`; inside a cell `-- NORMAL --` is replaced while the search
-  runs, like VSCodeVim's own `/`. In a cell, Enter in Vim NORMAL clears the
+  keeping the focus. The line and its count sit next to VSCodeVim's
+  `-- NORMAL --`: VSCodeVim only redraws its status bar on a key, so it
+  cannot be made to give way to them and come back reliably. In a cell, Enter in Vim NORMAL clears the
   highlight and leaves the cursor where it is. It
   honours `vim.ignorecase` and `vim.smartcase`, wraps around like Vim ("search
   hit BOTTOM, continuing at TOP"), and an empty `/` repeats the last search.

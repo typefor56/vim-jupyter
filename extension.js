@@ -80,11 +80,6 @@ function cellIndexOf(editor, document) {
   return document === undefined ? -1 : editor.notebook.getCells().findIndex((cell) => cell.document === document);
 }
 
-/** VSCodeVim reloads its configuration, and runs keys, asynchronously. */
-function vimSettled() {
-  return new Promise((resolve) => setTimeout(resolve, 80));
-}
-
 function vimLoaded() {
   return vscode.extensions.getExtension('vscodevim.vim')?.isActive === true;
 }
@@ -184,43 +179,24 @@ function registerJumps(context) {
 }
 
 /**
- * In a cell, VSCodeVim's `-- NORMAL --` is hidden while the '//' search runs
- * (see hideModeNameInCell). The only lever is the vim.showmodename setting,
- * switched off and restored; its previous user value is kept in globalState,
- * so a VS Code closed mid-search is put right at the next start.
+ * Versions 0.9–0.12 hid VSCodeVim's `-- NORMAL --` by switching
+ * vim.showmodename off; VSCodeVim only redraws on a key, so it could not be
+ * brought back reliably and the idea was dropped. Put back a value one of
+ * them left switched off.
  */
-function modeNameHider(context) {
+async function restoreModeName(context) {
   const KEY = 'vimNotebook.hiddenModeName';
-  const vimConfig = () => vscode.workspace.getConfiguration('vim');
-  /** What the extension wants, and what is written in the settings now. */
-  let wanted = false;
-  let applied = context.globalState.get(KEY) !== undefined; // left hidden by a previous run
-  // One step at a time, always towards the latest `wanted`: never decided
-  // from a settings read that a quick hide/restore could make stale.
-  let queue = Promise.resolve();
-  async function sync() {
-    if (wanted && !applied) {
-      await context.globalState.update(KEY, { value: vimConfig().inspect('showmodename')?.globalValue });
-      await vimConfig().update('showmodename', false, vscode.ConfigurationTarget.Global);
-      applied = true;
-    } else if (!wanted && applied) {
-      const saved = context.globalState.get(KEY);
-      await vimConfig().update('showmodename', saved?.value, vscode.ConfigurationTarget.Global);
-      await context.globalState.update(KEY, undefined);
-      applied = false;
-    }
+  const saved = context.globalState.get(KEY);
+  if (saved === undefined) {
+    return;
   }
-  function set(hidden) {
-    wanted = hidden;
-    queue = queue.then(sync, sync);
-    return queue;
-  }
-  void set(false);
-  return { hide: () => set(true), restore: () => set(false) };
+  await vscode.workspace
+    .getConfiguration('vim')
+    .update('showmodename', saved.value, vscode.ConfigurationTarget.Global);
+  await context.globalState.update(KEY, undefined);
 }
 
 function registerCommandMode(context, log) {
-  const modeName = modeNameHider(context);
   /** Keys typed so far of a multi-key mapping (`<leader>` g d…). */
   let typed = [];
   /**
@@ -258,25 +234,6 @@ function registerCommandMode(context, log) {
   /** In a cell: Vim's own search was just opened by a '/', still empty. */
   let cellSlash = false;
   let cellSlashTimer;
-  /**
-   * In a cell, `-- NORMAL --` is hidden from the '//' line until the search
-   * ends (Enter / :noh), as with VSCodeVim's own '/': setting off, then a
-   * no-op key so Vim redraws (it only redraws on keys) — safe then, as the
-   * user's keys go to the '//' line, not to Vim.
-   */
-  async function hideModeNameInCell() {
-    await modeName.hide();
-    if (vscode.window.activeTextEditor !== undefined && vimLoaded()) {
-      await vimSettled();
-      await vscode.commands.executeCommand('vim.remap', { after: ['<Esc>'] });
-    }
-  }
-  async function showModeNameInCell() {
-    // No key sent to redraw here: it would land late (after the settings
-    // write) in whatever the user types next — Vim redraws on that key.
-    await modeName.restore();
-  }
-
   function setCellSlash(on) {
     cellSlash = on;
     setContext('vimNotebook.cellSlash', on);
@@ -399,13 +356,9 @@ function registerCommandMode(context, log) {
   let markdownHighlights = 0;
 
   function setHighlighting(on) {
-    const wasOn = highlighting;
     highlighting = on;
     if (!on) {
       showSearchStatus(undefined);
-      if (wasOn) {
-        void showModeNameInCell();
-      }
     }
     setContext('vimNotebook.highlighting', on);
     paintHighlights();
@@ -613,24 +566,6 @@ function registerCommandMode(context, log) {
     // and Enter explains to use '//'.
     vscode.commands.registerCommand('vimNotebook.slash', () => setLine('', '/')),
     vscode.commands.registerCommand('vimNotebook.search', () => setLine('', '//')),
-    // Leaving a cell leaves VSCodeVim's `-- NORMAL --` showing: outside
-    // cells Vim cannot redraw its status bar (it needs an active editor), so
-    // the ':' / '//' line and its messages sit next to it there.
-    vscode.commands.registerCommand('vimNotebook.quitEdit', async () => {
-      await modeName.restore();
-      await vscode.commands.executeCommand('notebook.cell.quitEdit');
-    }),
-    vscode.commands.registerCommand('vimNotebook.enterCell', async () => {
-      await modeName.restore();
-      await vimSettled();
-      await vscode.commands.executeCommand('notebook.cell.edit');
-    }),
-    // However a text editor gets focus (a click…), the mode name comes back.
-    vscode.window.onDidChangeActiveTextEditor((textEditor) => {
-      if (textEditor !== undefined && !isSearchMove(textEditor)) {
-        void modeName.restore();
-      }
-    }),
     // In a cell, '/' is Vim's own search of that cell, opened at once (a
     // delay would send the next keys to Vim as commands). A second '/'
     // right after turns it into '//': Vim's search is closed, the cell left
@@ -639,13 +574,12 @@ function registerCommandMode(context, log) {
       clearTimeout(cellSlashTimer);
       if (cellSlash) {
         setCellSlash(false);
-        // The '//' line takes the keys at once — anything slow first (the
-        // settings write hiding `-- NORMAL --`) would let the next letters
-        // fall into Vim's own search. The cell keeps the focus.
+        // The '//' line takes the keys at once — anything slow first would
+        // let the next letters fall into Vim's own search. The cell keeps
+        // the focus.
         await vscode.commands.executeCommand('setContext', 'vimNotebook.cmdline', true);
         setLine('', '//');
         await vscode.commands.executeCommand('extension.vim_escape');
-        void hideModeNameInCell();
         return;
       }
       setCellSlash(true);
@@ -682,9 +616,6 @@ function registerCommandMode(context, log) {
         return;
       }
       paintHighlights();
-      if (event.document.uri.scheme === 'vscode-notebook-cell' && event.contentChanges.length > 0) {
-        void showModeNameInCell(); // editing: Vim's mode (INSERT…) must show
-      }
     }),
     currentMatchStyle,
     otherMatchStyle,
@@ -698,9 +629,6 @@ function registerCommandMode(context, log) {
       }
       if (key === '<Esc>') {
         setLine(undefined);
-        if (!highlighting) {
-          void showModeNameInCell();
-        }
       } else if (key === '<BS>') {
         // Like Vim: backspace on an empty command line leaves it.
         setLine(line === '' ? undefined : line.slice(0, -1));
@@ -785,6 +713,7 @@ function activate(context) {
   // What ':' targeted, so a misbehaviour can be read back from VS Code's logs.
   const log = vscode.window.createOutputChannel('Vim Notebook', { log: true });
   context.subscriptions.push(log);
+  void restoreModeName(context);
   registerCommandMode(context, log);
 }
 

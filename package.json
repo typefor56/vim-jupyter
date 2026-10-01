@@ -2,7 +2,7 @@
   "name": "vim-notebook",
   "displayName": "Vim Notebook",
   "description": "Vim where VSCodeVim stops short in Jupyter notebooks: gd/Ctrl-O jumps across cells, and your Vim keys (:w, :q, Ctrl-W, leader mappings) on a selected cell.",
-  "version": "0.12.2",
+  "version": "0.13.0",
   "publisher": "for56",
   "license": "MIT",
   "private": true,
@@ -56,16 +56,6 @@
       {
         "command": "vimNotebook.noHighlight",
         "title": "Clear Search Highlight (:noh)",
-        "category": "Vim Notebook"
-      },
-      {
-        "command": "vimNotebook.quitEdit",
-        "title": "Leave the Cell",
-        "category": "Vim Notebook"
-      },
-      {
-        "command": "vimNotebook.enterCell",
-        "title": "Enter the Cell",
         "category": "Vim Notebook"
       }
     ],
@@ -1085,11 +1075,6 @@
         "command": "vimNotebook.exKey",
         "args": "/",
         "when": "notebookEditorFocused && vimNotebook.cmdline && config.vimNotebook.keyboardLayout == 'azerty'"
-      },
-      {
-        "key": "enter",
-        "command": "vimNotebook.enterCell",
-        "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline && !vimNotebook.highlighting"
       },
       {
         "key": "n",
