@@ -436,6 +436,26 @@ function registerCommandMode(context, log) {
       await vscode.commands.executeCommand('vscode.open', document.uri, {
         selection: new vscode.Range(position, position),
       });
+      // The cell's editor comes back with the editor's own (thin) cursor, and
+      // VSCodeVim restyles it only on its next key: give it Normal mode's now.
+      // It may become the active editor only after `vscode.open` returns.
+      const name = vscode.workspace.getConfiguration('vim').get('cursorStylePerMode.normal') || 'block';
+      const style = { line: 1, block: 2, underline: 3, 'line-thin': 4, 'block-outline': 5, 'underline-thin': 6 }[name];
+      const restyle = (textEditor) => {
+        if (style === undefined || textEditor?.document !== document) {
+          return false;
+        }
+        textEditor.options = { cursorStyle: style };
+        return true;
+      };
+      if (!restyle(vscode.window.activeTextEditor)) {
+        const listener = vscode.window.onDidChangeActiveTextEditor((textEditor) => {
+          if (restyle(textEditor)) {
+            listener.dispose();
+          }
+        });
+        setTimeout(() => listener.dispose(), 1000);
+      }
       paintHighlights();
       return;
     }

@@ -258,13 +258,19 @@ suite('search and undo from command mode', () => {
       return (
         cellEditor !== undefined &&
         cellEditor.selection.isEmpty &&
-        cellEditor.selection.active.character === 4
+        cellEditor.selection.active.character === 4 &&
+        cellEditor.options.cursorStyle === vscode.TextEditorCursorStyle.Block
       );
-    }, 'the cursor on foo, nothing selected (NORMAL, not Visual)');
+    }, 'the cursor on foo, nothing selected, a block (NORMAL, not Visual)');
     await vscode.commands.executeCommand('vimNotebook.searchNext');
     await until(() => selected() === 2, 'wrapping back to the first match');
     await vscode.commands.executeCommand('vimNotebook.searchPrevious');
     await until(() => selected() === 3, 'N going back (wrapping)');
+    await until(
+      () => vscode.window.activeTextEditor?.document === code &&
+        vscode.window.activeTextEditor.options.cursorStyle === vscode.TextEditorCursorStyle.Block,
+      'back in the code cell, still a block cursor (NORMAL)',
+    );
     // :noh typed on the status-bar line, then n searches (and highlights) again.
     await vscode.commands.executeCommand('vimNotebook.ex');
     for (const key of ['n', 'o', 'h', '<CR>']) {

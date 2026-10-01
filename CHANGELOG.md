@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.15.2
+
+- The cursor stays a block (Normal mode) when a search match takes it into a
+  code cell (`§foo`, `n`, `N`): the cell's editor came back with the thin
+  cursor until the next key.
+
 ## 0.15.1
 
 - The `:` / `§` line sits to the right of VSCodeVim's `-- NORMAL --`, not to
