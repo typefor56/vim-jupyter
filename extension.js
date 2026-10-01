@@ -261,7 +261,7 @@ function registerCommandMode(context, log) {
     vscode.StatusBarAlignment.Left,
     Number.MIN_SAFE_INTEGER,
   );
-  commandLine.name = 'Vim Notebook command line';
+  commandLine.name = 'Vim Jupyter command line';
   // Keys typed so far ('/' waiting for its second, a leader…), bottom right
   // like Vim's showcmd: same place and priority as VSCodeVim's own.
   const showcmd = vscode.window.createStatusBarItem(
@@ -269,7 +269,7 @@ function registerCommandMode(context, log) {
     vscode.StatusBarAlignment.Right,
     Number.MAX_SAFE_INTEGER,
   );
-  showcmd.name = 'Vim Notebook typed keys';
+  showcmd.name = 'Vim Jupyter typed keys';
   /** A message left after a command ("match 1 of 3", "E486: …"). */
   let message;
   /** Until then, selection changes come from a search moving, not the user. */
@@ -360,7 +360,7 @@ function registerCommandMode(context, log) {
   let livePattern;
   // Rendered markdown cells have no editor: renderer.js highlights them in
   // the notebook's webview, told the pattern through renderer messaging.
-  const markdown = vscode.notebooks.createRendererMessaging('vim-notebook.markdown-search');
+  const markdown = vscode.notebooks.createRendererMessaging('vim-jupyter.markdown-search');
   /** Matches renderer.js last reported, for the tests. */
   let markdownHighlights = 0;
 
@@ -733,7 +733,7 @@ function activate(context) {
   void vscode.extensions.getExtension('vscodevim.vim')?.activate();
   registerJumps(context);
   // What ':' targeted, so a misbehaviour can be read back from VS Code's logs.
-  const log = vscode.window.createOutputChannel('Vim Notebook', { log: true });
+  const log = vscode.window.createOutputChannel('Vim Jupyter', { log: true });
   context.subscriptions.push(log);
   void restoreModeName(context);
   registerCommandMode(context, log);

@@ -1,8 +1,8 @@
 {
-  "name": "vim-notebook",
-  "displayName": "Vim Notebook",
+  "name": "vim-jupyter",
+  "displayName": "Vim Jupyter",
   "description": "Vim where VSCodeVim stops short in Jupyter notebooks: gd/Ctrl-O jumps across cells, a ':' command line and Ctrl-W on selected cells, and a \u00a7 search of the whole notebook.",
-  "version": "0.14.2",
+  "version": "0.15.0",
   "publisher": "for56",
   "license": "MIT",
   "icon": "media/icon.png",
@@ -46,42 +46,42 @@
       {
         "command": "vimNotebook.goToDefinition",
         "title": "Go to Definition (remember position)",
-        "category": "Vim Notebook"
+        "category": "Vim Jupyter"
       },
       {
         "command": "vimNotebook.back",
         "title": "Jump Back",
-        "category": "Vim Notebook"
+        "category": "Vim Jupyter"
       },
       {
         "command": "vimNotebook.forward",
         "title": "Jump Forward",
-        "category": "Vim Notebook"
+        "category": "Vim Jupyter"
       },
       {
         "command": "vimNotebook.ex",
         "title": "Vim Command Line (:) on the Selected Cell",
-        "category": "Vim Notebook"
+        "category": "Vim Jupyter"
       },
       {
         "command": "vimNotebook.search",
         "title": "Search the Notebook",
-        "category": "Vim Notebook"
+        "category": "Vim Jupyter"
       },
       {
         "command": "vimNotebook.searchNext",
         "title": "Next Match (n)",
-        "category": "Vim Notebook"
+        "category": "Vim Jupyter"
       },
       {
         "command": "vimNotebook.searchPrevious",
         "title": "Previous Match (N)",
-        "category": "Vim Notebook"
+        "category": "Vim Jupyter"
       },
       {
         "command": "vimNotebook.noHighlight",
         "title": "Clear Search Highlight (:noh)",
-        "category": "Vim Notebook"
+        "category": "Vim Jupyter"
       }
     ],
     "keybindings": [
@@ -1671,7 +1671,7 @@
       }
     ],
     "configuration": {
-      "title": "Vim Notebook",
+      "title": "Vim Jupyter",
       "properties": {
         "vimNotebook.commandLine": {
           "type": "string",
@@ -1703,7 +1703,7 @@
           "type": "string",
           "default": "\u00a7",
           "maxLength": 4,
-          "description": "Symbol shown before a notebook search being typed (\"\u00a7raise\"). The key itself is a keyboard shortcut: change \"Vim Notebook: Search the Notebook\" in Keyboard Shortcuts (default \u00a7 on an AZERTY keyboard, read as shift+oem_8)."
+          "description": "Symbol shown before a notebook search being typed (\"\u00a7raise\"). The key itself is a keyboard shortcut: change \"Vim Jupyter: Search the Notebook\" in Keyboard Shortcuts (default \u00a7 on an AZERTY keyboard, read as shift+oem_8)."
         },
         "vimNotebook.doubleSlashSearch": {
           "type": "boolean",
@@ -1714,8 +1714,8 @@
     },
     "notebookRenderer": [
       {
-        "id": "vim-notebook.markdown-search",
-        "displayName": "Vim Notebook search highlight in markdown",
+        "id": "vim-jupyter.markdown-search",
+        "displayName": "Vim Jupyter search highlight in markdown",
         "entrypoint": {
           "extends": "vscode.markdown-it-renderer",
           "path": "./renderer.js"

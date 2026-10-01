@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.15.0
+
+- Renamed Vim Jupyter (`for56.vim-jupyter`): the `vim-notebook` name is no
+  longer available on the Marketplace. Settings and commands keep their
+  `vimNotebook.*` ids, so existing configurations keep working.
+
 ## 0.14.2
 
 - An icon, in Plot Panel's style: notebook cells, the selected one marked,

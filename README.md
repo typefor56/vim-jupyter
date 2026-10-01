@@ -1,7 +1,7 @@
-# Vim Notebook
+# Vim Jupyter
 
 Vim where [VSCodeVim](https://github.com/VSCodeVim/Vim) stops short in Jupyter
-notebooks. Requires VSCodeVim.
+notebooks. Requires VSCodeVim. (Formerly published as Vim Notebook.)
 
 ## What it adds
 
@@ -41,7 +41,7 @@ runs.
 | `vimNotebook.commandLine` | `statusBar` | `visibleCell`: run `:` in a code cell already on screen, with Vim's real command line |
 | `vimNotebook.keyboardLayout` | `qwerty` | `azerty` translates the digit row and punctuation on the `:` / `§` lines |
 
-To use another key than `§`: *Keyboard Shortcuts* → "Vim Notebook: Search the
+To use another key than `§`: *Keyboard Shortcuts* → "Vim Jupyter: Search the
 Notebook". With `"keyboard.dispatch": "keyCode"`, `§` on AZERTY is read as
 `shift+oem_8`.
 
@@ -76,8 +76,8 @@ Notebook". With `"keyboard.dispatch": "keyCode"`, `§` on AZERTY is read as
 
 ```sh
 npm install
-npm run package                     # vim-notebook-<version>.vsix
-code --install-extension vim-notebook-*.vsix
+npm run package                     # vim-jupyter-<version>.vsix
+code --install-extension vim-jupyter-*.vsix
 npm test                            # real VS Code + your VSCodeVim (VSCODE_VERSION to pick one)
 ```
 
