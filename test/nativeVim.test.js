@@ -310,9 +310,11 @@ suite('search and undo from command mode', () => {
     await vscode.commands.executeCommand('notebook.cell.edit');
     await until(() => vscode.window.activeTextEditor?.document === code, 'in the code cell');
     vscode.window.activeTextEditor.selection = new vscode.Selection(0, 0, 0, 0);
-    await vscode.commands.executeCommand('vimNotebook.cellSlash');
-    await new Promise((resolve) => setTimeout(resolve, 1200)); // no second '/'
-    for (const text of ['f', 'o', 'o', '\n']) {
+    await vscode.commands.executeCommand('vimNotebook.cellSlash', 'normal');
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+    // The first key after '/' (taken by the extension's keybinding), then Vim.
+    await vscode.commands.executeCommand('vimNotebook.cellSlashKey', 'f');
+    for (const text of ['o', 'o', '\n']) {
       await vscode.commands.executeCommand('type', { text });
     }
     await until(
@@ -377,6 +379,25 @@ suite('search and undo from command mode', () => {
     await vscode.commands.executeCommand('vimNotebook.noHighlight');
     assert.strictEqual(editor.selections[0]?.start, 3);
     assert.strictEqual(codeEditorAt(3)?.selection.active.character, 4);
+    await vscode.commands.executeCommand('notebook.cell.quitEdit');
+  });
+
+  test("a second '/' long after the first, in a cell, still opens the notebook search", async () => {
+    const count = () => vscode.commands.executeCommand('vimNotebook.test.markdownHighlights');
+    await vscode.commands.executeCommand('vimNotebook.noHighlight');
+    await until(async () => (await count()) === 0, 'no highlight to start with');
+    const code = notebook.cellAt(1).document;
+    editor.selections = [new vscode.NotebookRange(1, 2)];
+    await vscode.commands.executeCommand('notebook.cell.edit');
+    await until(() => vscode.window.activeTextEditor?.document === code, 'in the code cell');
+    await vscode.commands.executeCommand('vimNotebook.cellSlash', 'normal');
+    await new Promise((resolve) => setTimeout(resolve, 1500)); // past vim.timeout
+    await vscode.commands.executeCommand('vimNotebook.cellSlash', 'search');
+    for (const key of ['f', 'o', 'o']) {
+      await vscode.commands.executeCommand('vimNotebook.exKey', key);
+    }
+    await until(async () => (await count()) >= 1, "'//foo' highlighting the notebook");
+    await vscode.commands.executeCommand('vimNotebook.exKey', '<Esc>');
     await vscode.commands.executeCommand('notebook.cell.quitEdit');
   });
 

@@ -2,7 +2,7 @@
   "name": "vim-notebook",
   "displayName": "Vim Notebook",
   "description": "Vim where VSCodeVim stops short in Jupyter notebooks: gd/Ctrl-O jumps across cells, and your Vim keys (:w, :q, Ctrl-W, leader mappings) on a selected cell.",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "publisher": "for56",
   "license": "MIT",
   "private": true,
@@ -908,12 +908,14 @@
       {
         "key": "/",
         "command": "vimNotebook.cellSlash",
-        "when": "editorTextFocus && notebookEditorFocused && vim.active && vim.mode == 'Normal' && !vimNotebook.cmdline"
+        "when": "editorTextFocus && notebookEditorFocused && vim.active && vim.mode == 'Normal' && !vimNotebook.cmdline",
+        "args": "normal"
       },
       {
         "key": "/",
         "command": "vimNotebook.cellSlash",
-        "when": "editorTextFocus && notebookEditorFocused && vim.active && vim.mode == 'SearchInProgressMode' && vimNotebook.cellSlash"
+        "when": "editorTextFocus && notebookEditorFocused && vim.active && vim.mode == 'SearchInProgressMode' && vimNotebook.cellSlash",
+        "args": "search"
       },
       {
         "key": "enter",
@@ -1085,6 +1087,552 @@
         "key": "shift+n",
         "command": "vimNotebook.searchPrevious",
         "when": "editorTextFocus && notebookEditorFocused && vim.active && vim.mode == 'Normal' && vimNotebook.highlighting && !vimNotebook.cmdline"
+      },
+      {
+        "key": "a",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "a",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+a",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "A",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "b",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "b",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+b",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "B",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "c",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "c",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+c",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "C",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "d",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "d",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+d",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "D",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "e",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "e",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+e",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "E",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "f",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "f",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+f",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "F",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "g",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "g",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+g",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "G",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "h",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "h",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+h",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "H",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "i",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "i",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+i",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "I",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "j",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "j",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+j",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "J",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "k",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "k",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+k",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "K",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "l",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "l",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+l",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "L",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "m",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "m",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+m",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "M",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "n",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "n",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+n",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "N",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "o",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "o",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+o",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "O",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "p",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "p",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+p",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "P",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "q",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "q",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+q",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "Q",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "r",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "r",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+r",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "R",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "s",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "s",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+s",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "S",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "t",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "t",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+t",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "T",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "u",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "u",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+u",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "U",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "v",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "v",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+v",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "V",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "w",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "w",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+w",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "W",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "x",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "x",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+x",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "X",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "y",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "y",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+y",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "Y",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "z",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "z",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+z",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "Z",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "0",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "0",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "1",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "1",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "2",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "2",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "3",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "3",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "4",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "4",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "5",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "5",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "6",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "6",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "7",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "7",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "8",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "8",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "9",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "9",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "space",
+        "command": "vimNotebook.cellSlashKey",
+        "args": " ",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "enter",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "<CR>",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode'"
+      },
+      {
+        "key": "shift+1",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "!",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "shift+5",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "%",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": ".",
+        "command": "vimNotebook.cellSlashKey",
+        "args": ".",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout != 'azerty'"
+      },
+      {
+        "key": "1",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "&",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+1",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "1",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "2",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "\u00e9",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+2",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "2",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "3",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "\"",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+3",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "3",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "4",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "'",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+4",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "4",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "5",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "(",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+5",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "5",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "6",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "-",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+6",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "6",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "7",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "\u00e8",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+7",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "7",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "8",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "_",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+8",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "8",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "9",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "\u00e7",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+9",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "9",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "0",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "\u00e0",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+0",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "0",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": ",",
+        "command": "vimNotebook.cellSlashKey",
+        "args": ",",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+,",
+        "command": "vimNotebook.cellSlashKey",
+        "args": "?",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": ".",
+        "command": "vimNotebook.cellSlashKey",
+        "args": ";",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
+      },
+      {
+        "key": "shift+.",
+        "command": "vimNotebook.cellSlashKey",
+        "args": ".",
+        "when": "editorTextFocus && notebookEditorFocused && vimNotebook.cellSlash && vim.mode == 'SearchInProgressMode' && config.vimNotebook.keyboardLayout == 'azerty'"
       }
     ],
     "configuration": {

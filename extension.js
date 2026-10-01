@@ -233,7 +233,6 @@ function registerCommandMode(context, log) {
   let timer;
   /** In a cell: Vim's own search was just opened by a '/', still empty. */
   let cellSlash = false;
-  let cellSlashTimer;
   function setCellSlash(on) {
     cellSlash = on;
     setContext('vimNotebook.cellSlash', on);
@@ -570,9 +569,10 @@ function registerCommandMode(context, log) {
     // delay would send the next keys to Vim as commands). A second '/'
     // right after turns it into '//': Vim's search is closed, the cell left
     // (nothing moves) and the notebook search line opened.
-    vscode.commands.registerCommand('vimNotebook.cellSlash', async () => {
-      clearTimeout(cellSlashTimer);
-      if (cellSlash) {
+    // `from` is where the '/' was typed: 'normal' (always a first '/') or
+    // 'search' (Vim's search line, still empty after a first '/').
+    vscode.commands.registerCommand('vimNotebook.cellSlash', async (from) => {
+      if (cellSlash && from !== 'normal') {
         setCellSlash(false);
         // The '//' line takes the keys at once — anything slow first would
         // let the next letters fall into Vim's own search. The cell keeps
@@ -582,12 +582,16 @@ function registerCommandMode(context, log) {
         await vscode.commands.executeCommand('extension.vim_escape');
         return;
       }
+      // No time limit: the second '/' may come any time, as long as nothing
+      // else was typed — the first other key ends it (vimNotebook.cellSlashKey).
       setCellSlash(true);
-      cellSlashTimer = setTimeout(
-        () => setCellSlash(false),
-        vscode.workspace.getConfiguration('vim').get('timeout', 1000),
-      );
       await vscode.commands.executeCommand('vim.remap', { after: ['/'] });
+    }),
+    // The first key typed in Vim's search after a lone '/': it was a search
+    // of the cell after all; the key goes on to Vim.
+    vscode.commands.registerCommand('vimNotebook.cellSlashKey', async (key) => {
+      setCellSlash(false);
+      await vscode.commands.executeCommand('type', { text: key === '<CR>' ? '\n' : key });
     }),
     markdown.onDidReceiveMessage((event) => {
       if (typeof event.message?.count === 'number') {
