@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- Same palette and flat style as Plot Panel's icon. -->
+  <rect width="128" height="128" rx="24" fill="#1f2a3a"/>
+  <!-- Three notebook cells. -->
+  <rect x="16" y="16" width="96" height="26" rx="6" fill="#2f3e52"/>
+  <rect x="16" y="51" width="96" height="26" rx="6" fill="#2f3e52"/>
+  <rect x="16" y="86" width="96" height="26" rx="6" fill="#2f3e52"/>
+  <!-- The selected cell. -->
+  <rect x="16" y="51" width="7" height="26" rx="3" fill="#14b8a6"/>
+  <!-- Lines of code. -->
+  <rect x="28" y="26" width="46" height="6" rx="3" fill="#465770"/>
+  <rect x="28" y="96" width="58" height="6" rx="3" fill="#465770"/>
+  <rect x="45" y="61" width="40" height="6" rx="3" fill="#465770"/>
+  <!-- Vim's NORMAL-mode block cursor. -->
+  <rect x="31" y="56" width="10" height="16" rx="1.5" fill="#8b5cf6"/>
+</svg>

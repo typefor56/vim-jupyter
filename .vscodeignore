@@ -3,3 +3,4 @@ test/**
 .gitignore
 node_modules/**
 .vscode-test/**
+media/icon.svg

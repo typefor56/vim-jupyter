@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.14.2
+
+- An icon, in Plot Panel's style: notebook cells, the selected one marked,
+  with Vim's NORMAL-mode block cursor.
+
 ## 0.14.1
 
 - Ready for the Marketplace: repository links, VSCodeVim declared as a

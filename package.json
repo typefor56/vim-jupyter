@@ -2,9 +2,10 @@
   "name": "vim-notebook",
   "displayName": "Vim Notebook",
   "description": "Vim where VSCodeVim stops short in Jupyter notebooks: gd/Ctrl-O jumps across cells, a ':' command line and Ctrl-W on selected cells, and a \u00a7 search of the whole notebook.",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "publisher": "for56",
   "license": "MIT",
+  "icon": "media/icon.png",
   "private": true,
   "repository": {
     "type": "git",
