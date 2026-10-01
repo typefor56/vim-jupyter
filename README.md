@@ -69,6 +69,16 @@ cell (Enter):
   the search is on) go to the next / previous match, cell after cell; Enter
   ends the search and leaves you in the cell, on the word. A match in a
   markdown cell is selected and shown rendered, highlighted.
+- A **dedicated key** can open the notebook search directly, without the
+  first `/` going through Vim's own search (which makes the status bar
+  flicker in a cell): bind it to `vimNotebook.search`. On AZERTY with
+  `keyboard.dispatch: keyCode`, `§` (Shift+!) is read as `shift+oem_8`:
+
+  ```json
+  { "key": "shift+oem_8", "command": "vimNotebook.search", "when": "notebookEditorFocused && !inputFocus && !vimNotebook.pending && !vimNotebook.cmdline" },
+  { "key": "shift+oem_8", "command": "vimNotebook.search", "when": "editorTextFocus && notebookEditorFocused && vim.active && vim.mode == 'Normal' && !vimNotebook.cmdline" }
+  ```
+
 - **`u`** / **`Ctrl-R`** undo / redo the notebook's edits (cells added,
   deleted, moved…), like `Ctrl+Z` outside a cell.
 

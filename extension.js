@@ -564,7 +564,13 @@ function registerCommandMode(context, log) {
     // kept off the notebook's own keys (Jupyter's `a` would insert a cell)
     // and Enter explains to use '//'.
     vscode.commands.registerCommand('vimNotebook.slash', () => setLine('', '/')),
-    vscode.commands.registerCommand('vimNotebook.search', () => setLine('', '//')),
+    // A dedicated key straight to the notebook search (e.g. '§' on AZERTY),
+    // from a cell or not: no '/' through Vim first, so nothing flickers.
+    // The line takes the keys before the next one can reach Vim.
+    vscode.commands.registerCommand('vimNotebook.search', async () => {
+      await vscode.commands.executeCommand('setContext', 'vimNotebook.cmdline', true);
+      setLine('', '//');
+    }),
     // In a cell, '/' is Vim's own search of that cell, opened at once (a
     // delay would send the next keys to Vim as commands). A second '/'
     // right after turns it into '//': Vim's search is closed, the cell left

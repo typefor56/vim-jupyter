@@ -401,6 +401,24 @@ suite('search and undo from command mode', () => {
     await vscode.commands.executeCommand('notebook.cell.quitEdit');
   });
 
+  test('the dedicated search key opens the notebook search from inside a cell, Vim untouched', async () => {
+    const count = () => vscode.commands.executeCommand('vimNotebook.test.markdownHighlights');
+    await vscode.commands.executeCommand('vimNotebook.noHighlight');
+    await until(async () => (await count()) === 0, 'no highlight to start with');
+    const code = notebook.cellAt(1).document;
+    editor.selections = [new vscode.NotebookRange(1, 2)];
+    await vscode.commands.executeCommand('notebook.cell.edit');
+    await until(() => vscode.window.activeTextEditor?.document === code, 'in the code cell');
+    await vscode.commands.executeCommand('vimNotebook.search'); // what '§' runs
+    for (const key of ['f', 'o', 'o']) {
+      await vscode.commands.executeCommand('vimNotebook.exKey', key);
+    }
+    await until(async () => (await count()) >= 1, 'the notebook search highlighting live');
+    assert.strictEqual(code.getText(), 'a = 1', 'nothing typed into the cell');
+    await vscode.commands.executeCommand('vimNotebook.exKey', '<Esc>');
+    await vscode.commands.executeCommand('notebook.cell.quitEdit');
+  });
+
   test("'//foo' Enter from inside a code cell leaves only 'match x of y'", async () => {
     const code = notebook.cellAt(1).document;
     editor.selections = [new vscode.NotebookRange(1, 2)];
