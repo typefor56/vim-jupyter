@@ -1,21 +1,45 @@
 {
   "name": "vim-notebook",
   "displayName": "Vim Notebook",
-  "description": "Vim where VSCodeVim stops short in Jupyter notebooks: gd/Ctrl-O jumps across cells, and your Vim keys (:w, :q, Ctrl-W, leader mappings) on a selected cell.",
-  "version": "0.14.0",
+  "description": "Vim where VSCodeVim stops short in Jupyter notebooks: gd/Ctrl-O jumps across cells, a ':' command line and Ctrl-W on selected cells, and a \u00a7 search of the whole notebook.",
+  "version": "0.14.1",
   "publisher": "for56",
   "license": "MIT",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/typefor56/vim-notebook.git"
+  },
+  "bugs": {
+    "url": "https://github.com/typefor56/vim-notebook/issues"
+  },
+  "homepage": "https://github.com/typefor56/vim-notebook#readme",
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
-    "Other"
+    "Keymaps",
+    "Notebooks"
+  ],
+  "keywords": [
+    "vim",
+    "vscodevim",
+    "jupyter",
+    "notebook",
+    "ipynb",
+    "search"
+  ],
+  "extensionDependencies": [
+    "vscodevim.vim"
   ],
   "activationEvents": [
     "*"
   ],
   "main": "./extension.js",
+  "scripts": {
+    "test": "vscode-test",
+    "package": "vsce package --allow-star-activation"
+  },
   "contributes": {
     "commands": [
       {
@@ -1698,10 +1722,6 @@
         "requiresMessaging": "optional"
       }
     ]
-  },
-  "scripts": {
-    "test": "vscode-test",
-    "package": "vsce package --allow-missing-repository --allow-star-activation"
   },
   "devDependencies": {
     "@vscode/test-cli": "^0.0.15",
