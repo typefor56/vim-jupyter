@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.15.5
+
+- Documentation: the README gives the commands to install the patched
+  VSCodeVim (`vscodevim-1.32.4-fast-insert.vsix`, attached to each release).
+
 ## 0.15.4
 
 - `tools/vscodevim-fast-insert.py`: **Escape right after typing puts the cursor

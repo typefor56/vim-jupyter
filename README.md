@@ -65,27 +65,39 @@ Notebook". With `"keyboard.dispatch": "keyCode"`, `§` on AZERTY is read as
 
 ## Typing lag with VSCodeVim
 
-VSCodeVim sends every character typed in Insert mode through its whole action
-pipeline: several round trips between the window and the extension host per
-key. A key held down at 50 repeats a second keeps writing for a second or two
-after it is released. `tools/vscodevim-fast-insert.py` patches VSCodeVim 1.32.4
-so that, once an insertion has started, characters and Backspace go straight to
-the editor from VSCodeVim's own queue: the order is kept, `u` and `.` still
-work.
+VSCodeVim handles every character typed in Insert mode itself, one round trip
+after another: a key held down keeps writing for a second or two after it is
+released. Each release here ships **`vscodevim-1.32.4-fast-insert.vsix`**,
+VSCodeVim 1.32.4 with that fixed: once an insertion has started, characters and
+Backspace go straight to the editor. `u`, `.` and the cursor behave as before.
+
+Install it over VSCodeVim, then reload the window:
 
 ```sh
-# a patched .vsix, built from the VSCodeVim you have installed
-python3 tools/vscodevim-fast-insert.py ~/.vscode/extensions/vscodevim.vim-1.32.4 --vsix vscodevim-fast-insert.vsix
-code --install-extension vscodevim-fast-insert.vsix --force
+curl -LO https://github.com/typefor56/vim-jupyter/releases/latest/download/vscodevim-1.32.4-fast-insert.vsix
+code --install-extension vscodevim-1.32.4-fast-insert.vsix --force
+# once more for each other profile you use:
+code --install-extension vscodevim-1.32.4-fast-insert.vsix --force --profile "My Profile"
+```
+
+To go back: `code --install-extension vscodevim.vim@1.32.4 --force`.
+
+An extension installed from a `.vsix` is not auto-updated, so the fix stays;
+Settings Sync, on the other hand, installs the Marketplace VSCodeVim on a new
+machine, so run the commands above there too. To build the package yourself
+from the VSCodeVim you have installed:
+
+```sh
+python3 tools/vscodevim-fast-insert.py ~/.vscode/extensions/vscodevim.vim-1.32.4 --vsix vscodevim-1.32.4-fast-insert.vsix
 ```
 
 Measured with real key presses in a notebook cell, on a virtual display (80
 repeats of a key at 50 per second): text kept coming 1.6–2.1 s after release
-with VSCodeVim, 0.5 s with the patch, 0 s without any Vim. The patch steps
-aside when Insert-mode mappings are configured, while a macro is recorded and
-with several cursors. Fifteen editing scenarios (arrows, Enter, brackets, `cw`
-then `.`, undo, counts, Visual…) give the same text and cursor as the
-unpatched VSCodeVim. It refuses to apply to any other VSCodeVim build.
+with VSCodeVim, 0.5 s with the fix, 0 s without any Vim. Fifteen editing
+scenarios (arrows, Enter, brackets, `cw` then `.`, undo, counts, Visual…) give
+the same text and cursor as the unpatched VSCodeVim. The fix steps aside when
+Insert-mode mappings are configured, while a macro is recorded and with several
+cursors, and the tool refuses any other VSCodeVim build.
 
 ## Known limits
 
