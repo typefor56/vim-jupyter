@@ -4,3 +4,4 @@ test/**
 node_modules/**
 .vscode-test/**
 media/icon.svg
+**/__pycache__/**
