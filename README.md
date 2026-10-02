@@ -38,6 +38,7 @@ runs.
 | --- | --- | --- |
 | `vimNotebook.searchSymbol` | `§` | Symbol shown on the search line |
 | `vimNotebook.doubleSlashSearch` | `false` | Also search the notebook with `//` |
+| `vimNotebook.stayInCell` | `true` | `j` on a cell's last line and `k` on its first stay in the cell |
 | `vimNotebook.commandLine` | `statusBar` | `visibleCell`: run `:` in a code cell already on screen, with Vim's real command line |
 | `vimNotebook.keyboardLayout` | `qwerty` | `azerty` translates the digit row and punctuation on the `:` / `§` lines |
 
@@ -61,6 +62,28 @@ Notebook". With `"keyboard.dispatch": "keyCode"`, `§` on AZERTY is read as
 { "key": "ctrl+o", "command": "vimNotebook.back", "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && vimNotebook.canGoBack" },
 { "key": "ctrl+i", "command": "vimNotebook.forward", "when": "editorTextFocus && vim.active && vim.mode == 'Normal' && vimNotebook.canGoForward" }
 ```
+
+## Typing lag with VSCodeVim
+
+VSCodeVim sends every character typed in Insert mode through its whole action
+pipeline: several round trips between the window and the extension host per
+key. A key held down at 50 repeats a second keeps writing for a second or two
+after it is released. `tools/vscodevim-fast-insert.py` patches VSCodeVim 1.32.4
+so that, once an insertion has started, characters and Backspace go straight to
+the editor from VSCodeVim's own queue: the order is kept, `u` and `.` still
+work.
+
+```sh
+# a patched .vsix, built from the VSCodeVim you have installed
+python3 tools/vscodevim-fast-insert.py ~/.vscode/extensions/vscodevim.vim-1.32.4 --vsix vscodevim-fast-insert.vsix
+code --install-extension vscodevim-fast-insert.vsix --force
+```
+
+Measured with real key presses in a notebook cell, on a virtual display (80
+repeats of a key at 50 per second): text kept coming 1.6–2.1 s after release
+with VSCodeVim, 0.5 s with the patch, 0 s without any Vim. The patch steps
+aside when Insert-mode mappings are configured, while a macro is recorded and
+with several cursors. It refuses to apply to any other VSCodeVim build.
 
 ## Known limits
 

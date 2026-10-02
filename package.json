@@ -2,7 +2,7 @@
   "name": "vim-jupyter",
   "displayName": "Vim Jupyter",
   "description": "Vim where VSCodeVim stops short in Jupyter notebooks: gd/Ctrl-O jumps across cells, a ':' command line and Ctrl-W on selected cells, and a \u00a7 search of the whole notebook.",
-  "version": "0.15.2",
+  "version": "0.15.3",
   "publisher": "for56",
   "license": "MIT",
   "icon": "media/icon.png",
@@ -1668,6 +1668,26 @@
         "key": "shift+oem_8",
         "command": "vimNotebook.search",
         "when": "editorTextFocus && notebookEditorFocused && vim.active && vim.mode == 'Normal' && !vimNotebook.cmdline"
+      },
+      {
+        "key": "j",
+        "command": "vim.remap",
+        "args": {
+          "after": [
+            "j"
+          ]
+        },
+        "when": "config.vimNotebook.stayInCell && vim.active && vim.mode == 'Normal' && editorTextFocus && inputFocus && notebookEditorFocused && notebookEditorCursorAtBoundary != 'none' && notebookEditorCursorAtBoundary != 'top'"
+      },
+      {
+        "key": "k",
+        "command": "vim.remap",
+        "args": {
+          "after": [
+            "k"
+          ]
+        },
+        "when": "config.vimNotebook.stayInCell && vim.active && vim.mode == 'Normal' && editorTextFocus && inputFocus && notebookEditorFocused && notebookEditorCursorAtBoundary != 'none' && notebookEditorCursorAtBoundary != 'bottom'"
       }
     ],
     "configuration": {
@@ -1685,6 +1705,11 @@
             "':' always opens a command line imitated in the status bar: nothing on screen moves; w, q, wq, x, q!, wa, qa, wqa."
           ],
           "description": "Where ':' on a selected cell (outside edit mode) opens the command line."
+        },
+        "vimNotebook.stayInCell": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "`j` on the last line of a cell and `k` on its first line stay in the cell, as in a file. VSCodeVim on its own moves to the next or previous cell there. Leave a cell with `Shift+Escape`."
         },
         "vimNotebook.keyboardLayout": {
           "type": "string",

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.15.3
+
+- **`j` on the last line of a cell and `k` on its first line stay in the cell**
+  (`vimNotebook.stayInCell`, on by default). VSCodeVim on its own jumps to the
+  next or previous cell there; `Shift+Escape` is the way out.
+- `tools/vscodevim-fast-insert.py`: a patch for VSCodeVim 1.32.4 that removes
+  most of its typing lag in Insert mode, in place or as a `.vsix` (see the
+  README).
+
 ## 0.15.2
 
 - The cursor stays a block (Normal mode) when a search match takes it into a
