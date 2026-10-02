@@ -83,7 +83,9 @@ Measured with real key presses in a notebook cell, on a virtual display (80
 repeats of a key at 50 per second): text kept coming 1.6–2.1 s after release
 with VSCodeVim, 0.5 s with the patch, 0 s without any Vim. The patch steps
 aside when Insert-mode mappings are configured, while a macro is recorded and
-with several cursors. It refuses to apply to any other VSCodeVim build.
+with several cursors. Fifteen editing scenarios (arrows, Enter, brackets, `cw`
+then `.`, undo, counts, Visual…) give the same text and cursor as the
+unpatched VSCodeVim. It refuses to apply to any other VSCodeVim build.
 
 ## Known limits
 

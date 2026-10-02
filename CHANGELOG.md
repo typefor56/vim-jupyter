@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.15.4
+
+- `tools/vscodevim-fast-insert.py`: **Escape right after typing puts the cursor
+  on the last character again.** With the first version of the patch,
+  VSCodeVim handled Escape from where the cursor was a few keys earlier
+  (`abc def` then Escape left it on `d`). It now waits for the characters sent
+  ahead and takes the cursor from the editor before any key it handles itself.
+  Checked against the unpatched VSCodeVim on fifteen editing scenarios with
+  real key presses: same text and same cursor every time. Running the tool on
+  a copy patched by 0.15.3 replaces the old patch.
+
 ## 0.15.3
 
 - **`j` on the last line of a cell and `k` on its first line stay in the cell**
